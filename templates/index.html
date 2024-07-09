@@ -6,20 +6,60 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Weather App</h1>
+    <div class="container">
+        <h1 class="title">A Simple Weather App</h1>
+    <!-- Form to get city input -->
     <form method="post">
         <input type="text" name="city" placeholder="Enter city name">
         <button type="submit">Get Weather</button>
     </form>
+
+
+    <!-- Display weather information -->
     {% if weather %}
-    <div class="weather-info">
-        <h2>{{ weather.name }}</h2>
-        <p>{{ weather.weather[0].description }}</p>
-        <p>Temperature: {{ weather.main.temp }} &deg;C</p>
-        <p>Humidity: {{ weather.main.humidity }}%</p>
+    <div class="weather-widget">
+        <div id="openweathermap-widget-11"></div>
+        <!-- <div class="weather-info">
+            <h2>{{ weather.name }}</h2>
+            <p>{{ weather.weather[0].description }}</p>
+            <p>Temperature: {{ weather.main.temp }} &deg;C</p>
+            <p>Humidity: {{ weather.main.humidity }}%</p>
+        </div> -->
     </div>
     {% elif weather is not none %}
-    <p>City not found!</p>
+    <p class="error">City not found!</p>
+    {% else %}
+    <p class="error">No weather data available.</p>
     {% endif %}
+        
+    <!-- Debug statements -->
+    <!--
+    <p>City input value: {{ city }}</p>
+    <p>API key: {{ appid }}</p>
+    <p>Weather data: {{ weather|tojson }}</p>
+    -->
+
+    <!-- OpenWeatherMap widget --> 
+    <script src='//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js'></script>
+    <script>
+        window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];
+        window.myWidgetParam.push({
+            id: 11,
+            cityid: '{{ weather.id }}',
+            appid: '{{ appid }}',
+            units: 'metric',
+            containerid: 'openweathermap-widget-11',
+        });
+        (function() {
+            var script = document.createElement('script');
+            script.async = true;
+            script.charset = "utf-8";
+            script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(script, s);
+        })();
+    </script>
+
+</div>
 </body>
 </html>
