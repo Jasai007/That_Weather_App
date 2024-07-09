@@ -13,6 +13,7 @@ BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
 @app.route('/', methods=['GET', 'POST'])
 def index():
     weather_data = None
+    city = ''
     print("Received request:", request.method)  # Debug: print request method
     if request.method == 'POST':
         city = request.form['city']
@@ -30,7 +31,7 @@ def index():
             print("Weather data:", weather_data)  # Debug: print weather data
         else:
             print("Error:", response.text)  # Debug: print error message
-    return render_template('index.html', weather=weather_data, city=city, appid=API_KEY)
+    return render_template('index.html', weather=weather_data, cityIndex=city, appid=API_KEY)
 
 if __name__ == '__main__':
     app.run(debug=True)
